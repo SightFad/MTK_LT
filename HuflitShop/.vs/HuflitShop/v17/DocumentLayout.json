@@ -1,0 +1,126 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|c:\\users\\admin\\desktop\\tracyshop (1)\\huflitshop\\migrations\\20220604062828_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|solutionrelative:migrations\\20220604062828_init.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|c:\\users\\admin\\desktop\\tracyshop (1)\\huflitshop\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|c:\\users\\admin\\desktop\\tracyshop (1)\\huflitshop\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|c:\\users\\admin\\desktop\\tracyshop (1)\\huflitshop\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|c:\\users\\admin\\desktop\\tracyshop (1)\\huflitshop\\wwwroot\\client\\js\\main.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|",
+      "RelativeMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|solutionrelative:wwwroot\\client\\js\\main.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|c:\\users\\admin\\desktop\\tracyshop (1)\\huflitshop\\views\\about\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{ECB70B15-D728-BE31-D30D-13ED004BB28F}|HuflitShop.csproj|solutionrelative:views\\about\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20220604062828_Init.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Migrations\\20220604062828_Init.cs",
+              "RelativeDocumentMoniker": "Migrations\\20220604062828_Init.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Migrations\\20220604062828_Init.cs",
+              "RelativeToolTip": "Migrations\\20220604062828_Init.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T10:00:19.318Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAAAJQAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-08T13:45:03.454Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "About.cshtml",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Views\\About\\About.cshtml",
+              "RelativeDocumentMoniker": "Views\\About\\About.cshtml",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Views\\About\\About.cshtml",
+              "RelativeToolTip": "Views\\About\\About.cshtml",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAAAFAAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-08T12:37:02.797Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "main.js",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\wwwroot\\Client\\js\\main.js",
+              "RelativeDocumentMoniker": "wwwroot\\Client\\js\\main.js",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\wwwroot\\Client\\js\\main.js",
+              "RelativeToolTip": "wwwroot\\Client\\js\\main.js",
+              "ViewState": "AgIAAI4AAAAAAAAAAAAnwJoAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-06-08T12:35:30.363Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-08T12:27:01.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\TracyShop (1)\\HuflitShop\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-08T12:25:38.722Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
