@@ -22,6 +22,14 @@ using HuflitShop.Services;
 using HuflitShop.Helpers;
 using HuflitShop.ViewModels;
 using Microsoft.AspNetCore.Authentication;
+// ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm using cho các pattern =====
+using HuflitShop.Factories;
+using HuflitShop.Decorators;
+using HuflitShop.Adapters;
+using HuflitShop.Facades;
+using HuflitShop.Observers;
+using HuflitShop.Prototypes;
+using HuflitShop.Strategies;
 
 namespace HuflitShop
 {
@@ -156,6 +164,50 @@ namespace HuflitShop
             services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppUserClaimsPrincipalFactory>();
             services.AddScoped<IAvatarSevice, AvatarService>();
 
+            /* ===== ĐÃ ÁP DỤNG DESIGN PATTERN =====
+            Đăng ký tất cả các Design Pattern services vào Dependency Injection container.
+            */
+
+            // ===== FACTORY METHOD PATTERN =====
+            // ===== ĐÃ ÁP DỤNG FACTORY METHOD PATTERN - ReviewsFactory =====
+            services.AddScoped<IReviewsFactory, ReviewsFactory>();
+
+            // ===== DECORATOR PATTERN =====
+            // Wrap EmailService với LoggingEmailDecorator
+            services.AddScoped<EmailService>(); // Đăng ký EmailService gốc
+            services.AddScoped<IEmailService>(provider =>
+            {
+                var emailService = provider.GetRequiredService<EmailService>();
+                return new LoggingEmailDecorator(emailService);
+            });
+
+            // ===== ĐÃ ÁP DỤNG ADAPTER PATTERN - ChatAdapter =====
+            services.AddScoped<IChatAdapter, ChatAdapter>();
+
+            // ===== SINGLETON PATTERN =====
+            // Singleton: chỉ tạo 1 instance duy nhất cho toàn bộ app
+            services.AddSingleton<ICacheService, CacheService>();
+
+            // ===== FACADE PATTERN =====
+            services.AddScoped<IOrderFacadeService, OrderFacadeService>();
+
+            // ===== OBSERVER PATTERN =====
+            // Đăng ký OrderCreatedObserver
+            services.AddScoped<IOrderObserver, OrderCreatedObserver>();
+
+            // ===== STRATEGY PATTERN =====
+            // Đăng ký factories cho các strategy
+            services.AddScoped<ShippingFeeStrategyFactory>();
+            services.AddScoped<PromotionCalculationStrategyFactory>();
+
+            // ===== BUILDER PATTERN =====
+            // OrderBuilder không cần đăng ký vì nó được tạo khi cần
+
+            // ===== PROTOTYPE PATTERN =====
+            // ProductsService đã được update để áp dụng Prototype Pattern
+            services.AddScoped<ProductsService>();
+            // ===== ĐÃ ÁP DỤNG PROTOTYPE PATTERN - ProductPrototype =====
+            services.AddScoped<IProductPrototype, ProductPrototype>();
 
             services.Configure<SMTPConfigModel>(Configuration.GetSection("SMTPConfig")); // đăng ký để Inject 
                                                                                          // Configuration.GetSection("SMTPConfig") : đọc config 

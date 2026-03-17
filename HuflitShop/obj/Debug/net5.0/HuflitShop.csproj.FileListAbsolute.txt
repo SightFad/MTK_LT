@@ -540,6 +540,16 @@ C:\Users\ADMIN\Desktop\TracyShop (1)\HuflitShop\obj\Debug\net5.0\refint\HuflitSh
 C:\Users\ADMIN\Desktop\TracyShop (1)\HuflitShop\obj\Debug\net5.0\HuflitShop.pdb
 C:\Users\ADMIN\Desktop\TracyShop (1)\HuflitShop\obj\Debug\net5.0\HuflitShop.genruntimeconfig.cache
 C:\Users\ADMIN\Desktop\TracyShop (1)\HuflitShop\obj\Debug\net5.0\ref\HuflitShop.dll
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.csproj.AssemblyReference.cache
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.AssemblyInfoInputs.cache
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.AssemblyInfo.cs
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.csproj.CoreCompileInputs.cache
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.RazorAssemblyInfo.cache
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.RazorAssemblyInfo.cs
+C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.sourcelink.json
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\bin\Debug\net5.0\appsettings.Development.json
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\bin\Debug\net5.0\appsettings.json
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\bin\Debug\net5.0\Data\Json\District.json
@@ -972,15 +982,6 @@ C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\bin\Debug\net5.0\runtimes\un
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.csproj.AssemblyReference.cache
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.AssemblyInfoInputs.cache
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.AssemblyInfo.cs
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.csproj.CoreCompileInputs.cache
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.RazorAssemblyInfo.cache
-C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.RazorAssemblyInfo.cs
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.TagHelpers.input.cache
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.TagHelpers.output.cache
 C:\Users\lepha\Desktop\MTK\LT\HuflitShop\HuflitShop\obj\Debug\net5.0\HuflitShop.RazorCoreGenerate.cache

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using HuflitShop.Data;
 using HuflitShop.Models;
 using HuflitShop.ViewModels;
+// ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm using cho các pattern =====
+using HuflitShop.Services;
+using HuflitShop.Prototypes;
 
 namespace HuflitShop.Controllers
 {
@@ -22,6 +25,10 @@ namespace HuflitShop.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm Singleton Cache Service =====
+        private readonly ICacheService _cacheService;
+        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm Prototype Service =====
+        private readonly IProductPrototype _productPrototype;
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public static double GetTicks(DateTime dateTime)
@@ -29,17 +36,23 @@ namespace HuflitShop.Controllers
             return dateTime.Subtract(Epoch).TotalMilliseconds;
         }
 
-        public ProductController(ILogger<ProductController> logger, AppDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
+        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm ICacheService và IProductPrototype vào constructor =====
+        public ProductController(ILogger<ProductController> logger, AppDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager, ICacheService cacheService, IProductPrototype productPrototype)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _cacheService = cacheService;
+            // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm ProductPrototype =====
+            _productPrototype = productPrototype;
         }
 
         [Route("/product", Name = "product")]
-        public IActionResult Product()
+        public async Task<IActionResult> Product()
         {
+            /* ===== CHƯA ÁP DỤNG DESIGN PATTERN =====
+            // Cách cũ: Truy vấn trực tiếp database mỗi lần
             List<ProductsListViewModel> products = new List<ProductsListViewModel>();
             List<Image> images = new List<Image>();
             var qr = _context.Image.ToList();
@@ -85,10 +98,67 @@ namespace HuflitShop.Controllers
             ViewBag.Categories = _context.Category.ToList();
             ViewBag.Products = products;
             return View();
+            */
+
+            // ===== ĐÃ ÁP DỤNG SINGLETON PATTERN =====
+            // Sử dụng Singleton Cache để lấy Categories (thay vì truy vấn DB mỗi lần)
+            var categories = await _cacheService.GetCategoriesAsync();
+            ViewBag.Categories = categories;
+
+            // Vẫn lấy sản phẩm từ DB (vì sản phẩm hay thay đổi)
+            List<ProductsListViewModel> products = new List<ProductsListViewModel>();
+            List<Image> images = new List<Image>();
+            var qr = _context.Image.ToList();
+            foreach(var img in qr)
+            {
+                images.Add(img);
+            }
+
+            foreach (var p in _context.Product.Where(p => p.Active == true).ToList().OrderBy(p => p.Price))
+            {
+                if(p.Active == true)
+                {
+                    var pro = new ProductsListViewModel();
+                    if (images.Where(img => img.ProductId == p.Id).Count() <= 0)
+                    {
+                        pro.ImageDefault = "";
+                    }
+                    else
+                    {
+                        pro.ImageDefault = images.Where(img => img.ProductId == p.Id).First().Path;
+                    }
+
+                    // Kiểm tra số lượng sản phẩm trong kho
+                    var quantity = _context.ProductSize.Where(ps => ps.ProductId == p.Id).ToList();
+                    int totalQuantity = 0;
+                    foreach (var item in quantity)
+                    {
+                        totalQuantity += item.Quantity;
+                    }
+
+                    pro.Id = p.Id;
+                    pro.Name = p.Name;
+                    pro.Count = totalQuantity;
+                    pro.Price = p.Price;
+                    products.Add(pro);
+
+                }
+                else
+                {
+                    continue;
+                }    
+            }
+            ViewBag.Products = products;
+            return View();
         }
 
-        public IActionResult Category(int? id)
+        public async Task<IActionResult> Category(int? id)
         {
+            // ===== ĐÃ ÁP DỤNG SINGLETON PATTERN =====
+            // Lấy Categories từ Cache Singleton thay vì truy vấn DB
+            var cachedCategories = await _cacheService.GetCategoriesAsync();
+            ViewBag.Categories = cachedCategories;
+
             List<ProductsListViewModel> products = new List<ProductsListViewModel>();
             List<Image> images = new List<Image>();
             var qr = _context.Image.ToList();
@@ -96,7 +166,6 @@ namespace HuflitShop.Controllers
             {
                 images.Add(img);
             }
-            ViewBag.Categories = _context.Category.ToList();
             var query = _context.Product.Where(p => p.Active == true).ToList();
             if (id != null)
             {
@@ -137,8 +206,13 @@ namespace HuflitShop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Search(string search)
+        public async Task<IActionResult> Search(string search)
         {
+            // ===== ĐÃ ÁP DỤNG SINGLETON PATTERN =====
+            // Lấy Categories từ Cache Singleton
+            var cachedCategories = await _cacheService.GetCategoriesAsync();
+            ViewBag.Categories = cachedCategories;
+
             List<ProductsListViewModel> products = new List<ProductsListViewModel>();
             List<Image> images = new List<Image>();
             var qr = _context.Image.ToList();
@@ -146,16 +220,15 @@ namespace HuflitShop.Controllers
             {
                 images.Add(img);
             }
-            ViewBag.Categories = _context.Category.ToList();
             ViewData["GetProduct"] = search;
             var query = _context.Product.Where(p => p.Active == true).ToList();
             if (!String.IsNullOrEmpty(search))
             {
                 query = query.Where(p =>
                 p.Name.ToLower().Contains(search) ||
-                p.Category.Name.ToLower().Contains(search) ||
-                p.Trandemark.ToLower().Contains(search) ||
-                p.Origin.Contains(search)).ToList();
+                (p.Category != null && p.Category.Name.ToLower().Contains(search)) ||
+                (p.Trandemark != null && p.Trandemark.ToLower().Contains(search)) ||
+                (p.Origin != null && p.Origin.Contains(search))).ToList();
 
                 foreach(var pro in query)
                 {
@@ -303,6 +376,10 @@ namespace HuflitShop.Controllers
             var userid = _userManager.GetUserId(HttpContext.User);
             AppUser user = _userManager.FindByIdAsync(userid).Result;
             var product = _context.Product.Where(p => p.Id == id).First();
+            
+            // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm PROTOTYPE để clone sản phẩm cho giỏ hàng =====
+            var clonedProduct = _productPrototype.CloneForCart(product);
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [PROTOTYPE - ADDCART] ✓ Sản phẩm được clone thành công cho giỏ hàng, ID: {clonedProduct.Id}, Name: {clonedProduct.Name}");
 
             // Kiểm tra số lượng sản phẩm trong kho
             var quantities = _context.ProductSize.Where(p => p.ProductId == product.Id).ToList();
@@ -349,9 +426,10 @@ namespace HuflitShop.Controllers
                     var cart = new Cart();
                     if (ModelState.IsValid)
                     {
+                        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Sử dụng PROTOTYPE cloned product cho giỏ hàng =====
                         cart.Quantity = 1;
-                        cart.ProductId = product.Id;
-                        cart.UnitPrice = product.Price;
+                        cart.ProductId = clonedProduct.Id;
+                        cart.UnitPrice = clonedProduct.Price;
                         if (promotion != null)
                         {
                             cart.Promotion = promotion.percent;
@@ -404,6 +482,10 @@ namespace HuflitShop.Controllers
             var userid = _userManager.GetUserId(HttpContext.User);
             AppUser user = _userManager.FindByIdAsync(userid).Result;
             var product = _context.Product.Where(p => p.Id == id).First();
+            
+            // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm PROTOTYPE để clone sản phẩm cho giỏ hàng mua ngay =====
+            var clonedProduct = _productPrototype.CloneForCart(product);
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [PROTOTYPE - BUYNOW] ✓ Sản phẩm được clone thành công cho mua ngay, ID: {clonedProduct.Id}, Name: {clonedProduct.Name}");
 
             // Lấy size
             var qr1 = _context.Sizes.ToList();
@@ -444,9 +526,10 @@ namespace HuflitShop.Controllers
                     var cart = new Cart();
                     if (ModelState.IsValid)
                     {
+                        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Sử dụng PROTOTYPE cloned product cho mua ngay =====
                         cart.Quantity = 1;
-                        cart.ProductId = product.Id;
-                        cart.UnitPrice = product.Price;
+                        cart.ProductId = clonedProduct.Id;
+                        cart.UnitPrice = clonedProduct.Price;
                         if (promotion != null)
                         {
                             cart.Promotion = promotion.percent;

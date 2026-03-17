@@ -18,6 +18,13 @@ using Address = HuflitShop.Models.Address;
 using Order = HuflitShop.Models.Order;
 using BraintreeHttp;
 using HttpResponse = BraintreeHttp.HttpResponse;
+// ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm using cho các pattern =====
+using HuflitShop.Factories;
+using HuflitShop.Strategies;
+using HuflitShop.Facades;
+using HuflitShop.Observers;
+using HuflitShop.Builders;
+using HuflitShop.Services;
 
 namespace HuflitShop.Controllers
 {
@@ -30,10 +37,20 @@ namespace HuflitShop.Controllers
         private readonly ILoginRepository _loginRepository;
         private readonly string _clientId;
         private readonly string _secretKey;
+        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm các dependencies =====
+        private readonly ShippingFeeStrategyFactory _shippingStrategyFactory;
+        private readonly PromotionCalculationStrategyFactory _promotionStrategyFactory;
+        private readonly IOrderFacadeService _orderFacadeService;
+        private readonly IOrderObserver _orderObserver;
 
         public double TyGiaUSD = 22759;
 
-        public OrderController(ILogger<OrderController> logger, AppDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager, ILoginRepository loginRepository, IConfiguration config)
+        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Thêm các pattern dependencies vào constructor =====
+        public OrderController(ILogger<OrderController> logger, AppDbContext context, IHttpContextAccessor httpContextAccessor, 
+            UserManager<AppUser> userManager, ILoginRepository loginRepository, IConfiguration config,
+            ShippingFeeStrategyFactory shippingStrategyFactory,
+            PromotionCalculationStrategyFactory promotionStrategyFactory, IOrderFacadeService orderFacadeService,
+            IOrderObserver orderObserver)
         {
             _logger = logger;
             _context = context;
@@ -42,6 +59,11 @@ namespace HuflitShop.Controllers
             _loginRepository = loginRepository;
             _clientId = config["PaypalSettings:ClientId"];
             _secretKey = config["PaypalSettings:SecretKey"];
+            // ===== ĐÃ ÁP DỤNG DESIGN PATTERN =====
+            _shippingStrategyFactory = shippingStrategyFactory;
+            _promotionStrategyFactory = promotionStrategyFactory;
+            _orderFacadeService = orderFacadeService;
+            _orderObserver = orderObserver;
         }
 
         // GET: OrderController/Create
@@ -99,7 +121,23 @@ namespace HuflitShop.Controllers
             orderView.TotalPrice = totalPrice;
             orderView.CountQuantity = countQuantity;
             orderView.PaymentMenthods = paymentMenthods;
+            
+            /* ===== CHƯA ÁP DỤNG DESIGN PATTERN =====
+            // Cách cũ: Hardcode phí vận chuyển = 20,000 VND (cố định, không linh hoạt)
             orderView.ShoppingFee = 20000;
+            */
+
+            // ===== ĐÃ ÁP DỤNG STRATEGY PATTERN =====
+            // Sử dụng Strategy Pattern để tính phí vận chuyển linh hoạt dựa theo destination
+            string destination = address != null ? address.City : "HCM";
+            var shippingStrategy = _shippingStrategyFactory.GetStrategy(destination);
+            float calculatedShippingFee = shippingStrategy.CalculateShippingFee(carts.ToArray(), destination);
+            
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [STRATEGY PATTERN - CONTROLLER] Destination: {destination}");
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [STRATEGY PATTERN - CONTROLLER] Chọn Strategy: {shippingStrategy.GetStrategyName()}");
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [STRATEGY PATTERN - CONTROLLER] Phí vận chuyển: {calculatedShippingFee} VND");
+            
+            orderView.ShoppingFee = calculatedShippingFee;
 
             ViewBag.Content = "";
 
@@ -112,6 +150,8 @@ namespace HuflitShop.Controllers
         [Route("/orders", Name = "orders")]
         public async Task<IActionResult> Order(OrderViewModel orderView)
         {
+            /* ===== CHƯA ÁP DỤNG DESIGN PATTERN =====
+            // Cách cũ: Xử lý trực tiếp trong controller (rất phức tạp và lặp lại)
             if(orderView.PaymentMenthodId == 1)
             {
                 try
@@ -126,49 +166,45 @@ namespace HuflitShop.Controllers
                     Task.Delay(200).Wait();
 
                     var cart = _context.Carts.Where(c => c.UserId == order.UserId && c.IsBuy == false).ToList();
-                    foreach (var item in cart)
-                    {
-                        item.IsBuy = true;
-                        _context.Update(item);
-                    }
-
-                    foreach (var item in cart)
-                    {
-                        var orderDetail = new OrderDetail();
-                        orderDetail.OrderId = _context.Orders.OrderBy(x => x.Id).Last().Id;
-                        orderDetail.ProductId = item.ProductId;
-                        orderDetail.Quantity = item.Quantity;
-                        orderDetail.SelectedSize = item.SelectedSize;
-                        orderDetail.Price = item.UnitPrice * (1 - item.Promotion);
-                        orderDetail.Promotion = item.Promotion;
-                        _context.Add(orderDetail);
-
-                        var query = _context.ProductSize.Where(p => p.ProductId == item.ProductId && p.SizeId == item.SelectedSize).First();
-                        query.Quantity -= item.Quantity;
-                        _context.Update(query);
-                    }
-                    await _context.SaveChangesAsync();
-
-                    Task.Delay(300).Wait();
-
-                    ViewBag.Content = "Mua hàng";
-                    ViewBag.News = true;
-                    ViewBag.Class = "alert alert-success";
-                    ViewBag.Message = "Đặt hàng thành công!";
-
-                    return View();
+                    ... (nhiều dòng code phức tạp)
                 }
-                catch
-                {
-                    ViewBag.Content = "Mua hàng";
-                    ViewBag.News = false;
-                    ViewBag.Class = "alert alert-danger";
-                    ViewBag.Message = "Rất tiếc, quá trình đặt hàng của bạn chưa thành công. Vui lòng thử lại!";
-                    return View();
-                }
+                catch { ... }
+            }
+            */
+
+            if(orderView.PaymentMenthodId == 1)
+            {
+                /* ===== ĐÃ ÁP DỤNG FACADE PATTERN + OBSERVER PATTERN =====
+                Thay vì xử lý từng bước trong controller (xấu):
+                - Tạo Order
+                - Mark Carts as bought
+                - Create OrderDetails
+                - Update inventory
+                - Gọi observer
+                
+                Ta chỉ cần gọi _orderFacadeService.ProcessCashOrderAsync()
+                Facade sẽ đăng ký observer và xử lý tất cả.
+                Code ngắn gọn, dễ hiểu, dễ maintain.
+                */
+
+                // ===== ĐÃ ÁP DỤNG FACADE PATTERN + OBSERVER PATTERN =====
+                // Subscribe observer trước khi xử lý
+                var facadeService = _orderFacadeService as OrderFacadeService;
+                facadeService?.Subscribe(_orderObserver);
+
+                // Gọi Facade để xử lý toàn bộ quy trình
+                var (success, message, orderId) = await _orderFacadeService.ProcessCashOrderAsync(
+                    _userManager.GetUserId(HttpContext.User)
+                );
+                return View();
             }
             else
             {
+                /* ===== CHƯA ÁP DỤNG DESIGN PATTERN - PayPal payment (giữ nguyên cũ)  =====
+                // PayPal integration code vẫn giữ nguyên
+                // Có thể áp dụng pattern sau này
+                */
+                
                 var environment = new SandboxEnvironment(_clientId, _secretKey);
                 var client = new PayPalHttpClient(environment);
 
@@ -280,6 +316,9 @@ namespace HuflitShop.Controllers
         [Route("/order/checkout-success")]
         public async Task<IActionResult> CheckoutSuccess()
         {
+            /* ===== CHƯA ÁP DỤNG DESIGN PATTERN =====
+            // Cách cũ: Tạo Order object với từng property riêng lẻ (không có validation, khó mở rộng)
+            */
             var order = new Order();
             order.PaymentMenthodId = 2;
             order.ShoppingFee = 20000;

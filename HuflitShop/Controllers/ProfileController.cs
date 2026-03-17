@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System;
 using System.Collections.Generic;
+// ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Builder Pattern =====
+using HuflitShop.Builders;
 
 namespace HuflitShop.Controllers
 {
@@ -21,6 +23,8 @@ namespace HuflitShop.Controllers
         private readonly ILoginRepository _loginRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly AppDbContext _context;
+        // ===== ĐÃ ÁP DỤNG DESIGN PATTERN - Builder Pattern =====
+        // UserBuilder sẽ được inject qua constructor (hoặc tạo trực tiếp)
 
         public ProfileController(ILoginRepository loginRepository, UserManager<AppUser> userManager, AppDbContext context, IHostingEnvironment hostingEnvironment)
         {
@@ -83,6 +87,8 @@ namespace HuflitShop.Controllers
                 fileName = "";
             }
             
+            /* ===== CHƯA ÁP DỤNG DESIGN PATTERN =====
+            // Cách cũ: Set từng property trực tiếp
             user.Name = userdetails.Name;
             user.PhoneNumber = userdetails.PhoneNumber;
             user.Gender = userdetails.Gender;
@@ -96,6 +102,36 @@ namespace HuflitShop.Controllers
             {
                 user.Avatar = "/img/avatar/" + fileName;
             }
+            */
+            
+            // ===== ĐÃ ÁP DỤNG BUILDER PATTERN =====
+            // Sử dụng UserBuilder để xây dựng và validate dữ liệu từng bước
+            // Sau đó apply các giá trị vào existing tracked entity (để tránh EF Core tracking conflict)
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [BUILDER PATTERN - PROFILE] Bắt đầu xây dựng User object từ thông tin mới");
+            
+            string avatarPath = fileName == "" ? "" : "/img/avatar/" + fileName;
+            
+            // Sử dụng Builder để validate và xây dựng giá trị (không thay thế entity)
+            var builtUser = new UserBuilder()
+                .WithUserName(user.UserName)
+                .WithEmail(user.Email)
+                .WithName(userdetails.Name)
+                .WithPhoneNumber(userdetails.PhoneNumber)
+                .WithGender(userdetails.Gender)
+                .WithBirthday(userdetails.Birthday)
+                .WithAvatar(avatarPath)
+                .Build();
+            
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [BUILDER PATTERN - PROFILE] Builder đã validate thành công - UserName: {builtUser.UserName}, Name: {builtUser.Name}");
+            
+            // Apply built values vào existing tracked entity (tránh conflict với EF Core)
+            user.Name = builtUser.Name;
+            user.PhoneNumber = builtUser.PhoneNumber;
+            user.Gender = builtUser.Gender;
+            user.Birthday = builtUser.Birthday;
+            user.Avatar = builtUser.Avatar;
+            
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [BUILDER PATTERN - PROFILE] Đã apply built properties vào tracked entity - Avatar: {user.Avatar}");
             
             userdetails.Email = user.Email;
             userdetails.UserName = user.UserName;
